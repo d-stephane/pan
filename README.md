@@ -1,7 +1,7 @@
 
 ## Modifs apportées
 
-J'ai besoin de garder l'IP avec les stats, j'ai don ajouté deux tables :
+Pour un de mes projets j'ai besoin de garder l'IP avec les stats, j'ai donc ajouté deux tables :
 
 - pan_ip
 - pan_stats
