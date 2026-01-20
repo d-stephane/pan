@@ -39,7 +39,7 @@ final class InstallPanCommand extends Command
      */
     public function handle(): void
     {
-        $existingMigrations = glob(database_path('migrations/*_create_pan_analytics_table.php'));
+        $existingMigrations = glob(database_path('migrations/*_create_pan_*'));
 
         if ($existingMigrations === []) {
             $this->output->writeln('');

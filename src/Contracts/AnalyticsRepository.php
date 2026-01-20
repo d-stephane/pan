@@ -22,7 +22,7 @@ interface AnalyticsRepository
     /**
      * Increments the given event for the given analytic.
      */
-    public function increment(string $name, EventType $event): void;
+    public function increment(string $name, EventType $event, string $ip): void;
 
     /**
      * Flush all analytics.

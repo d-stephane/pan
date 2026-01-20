@@ -23,7 +23,11 @@ final readonly class EventController
         /** @var Collection<int, array{name: string, type: string}> $events */
         $events = $request->collect('events');
 
-        $events->each(fn (array $event) => $action->handle($event['name'], EventType::from($event['type'])));
+        $events->each(fn (array $event) => $action->handle(
+            $event['name'],
+            EventType::from($event['type']),
+            $request->ip()
+        ));
 
         return response()->noContent();
     }

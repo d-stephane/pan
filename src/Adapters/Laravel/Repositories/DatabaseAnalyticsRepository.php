@@ -45,7 +45,7 @@ final readonly class DatabaseAnalyticsRepository implements AnalyticsRepository
     /**
      * Increments the given event for the given analytic.
      */
-    public function increment(string $name, EventType $event): void
+    public function increment(string $name, EventType $event, string $ip): void
     {
         [
             'allowed_analytics' => $allowedAnalytics,
@@ -65,6 +65,8 @@ final readonly class DatabaseAnalyticsRepository implements AnalyticsRepository
         }
 
         DB::table('pan_analytics')->where('name', $name)->increment($event->column());
+
+        $this->addStats($name, $event, $ip);
     }
 
     /**
@@ -73,5 +75,46 @@ final readonly class DatabaseAnalyticsRepository implements AnalyticsRepository
     public function flush(): void
     {
         DB::table('pan_analytics')->truncate();
+    }
+
+
+    // -----------------------------------------------------------------------------------------------------------------------------------------------
+
+
+    /**
+     * @return void
+     */
+    private function addStats(string $name, EventType $event, string $ip): void
+    {
+        $field = $event->column();
+
+        DB::insert('
+            INSERT INTO pan_stats (pan_ip_id, name, '.$field.') VALUES (?, ?, ?)
+            ON CONFLICT ON CONSTRAINT u_id_pan_ip_name DO UPDATE SET
+                pan_ip_id = pan_stats.pan_ip_id,
+                name = pan_stats.name,
+                '.$field.' = pan_stats.'.$field.' + 1',
+            [$this->checkIP($ip), $name, 1]
+        );
+    }
+
+
+    /**
+     * @return int
+     */
+    private function checkIP(string $ip): int
+    {
+        $id = DB::select('SELECT id FROM pan_ip WHERE ip = ?', [$ip]);
+
+        return (empty($id)) ? $this->addIP($ip) : $id[0]->id;
+    }
+
+
+    /**
+     * @return int
+     */
+    private function addIP(string $ip): int
+    {
+        return DB::table('pan_ip')->insertGetId(['ip' => $ip]);
     }
 }
