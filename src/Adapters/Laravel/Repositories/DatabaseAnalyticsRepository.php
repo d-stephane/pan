@@ -90,7 +90,7 @@ final readonly class DatabaseAnalyticsRepository implements AnalyticsRepository
 
         DB::insert('
             INSERT INTO pan_stats (pan_ip_id, name, '.$field.') VALUES (?, ?, ?)
-            ON CONFLICT ON CONSTRAINT u_id_pan_ip_name DO UPDATE SET
+            ON CONFLICT ON CONSTRAINT u_pan_stats_pan_ip_id_name DO UPDATE SET
                 pan_ip_id = pan_stats.pan_ip_id,
                 name = pan_stats.name,
                 '.$field.' = pan_stats.'.$field.' + 1',
