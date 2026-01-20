@@ -50,5 +50,5 @@ php artisan install:pan
 ## Visualisation des stats
 
 A part la commande d'origine qui permet de visualiser les stats de la table ***pan_analytics***, 
-il n'est pas possible de voir des données des tables ***pan_ip*** et ***pan_stats***.
+il n'est pas possible de voir les données des tables ***pan_ip*** et ***pan_stats***.
 J'utilise ces données sur une page dédiée dans le projet avec lequel se trouve déployé ce package. 
